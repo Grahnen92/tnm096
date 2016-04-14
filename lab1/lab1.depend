@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1460637604 source:h:\tnm096\lab1\eightpuzzle.cpp
+	"EightPuzzle.hpp"
+	<iostream>
+
+1460637502 h:\tnm096\lab1\eightpuzzle.hpp
+
+1460637157 source:h:\tnm096\lab1\main.cpp
+	<iostream>
+	"EightPuzzle.hpp"
+
