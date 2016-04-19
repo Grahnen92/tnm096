@@ -1,10 +1,10 @@
 
 
-class EightPuzzle
+class Heap
 {
 public:
 
-    EightPuzzle();
+    Heap();
 
 
 private:
