@@ -3,228 +3,181 @@
 #include <iostream>
 
 EightPuzzle::EightPuzzle(){
+    puzzleNode temp;
 
-    wrongAmount = 0;
-    tmpWrongAmount[0] = 0; tmpWrongAmount[1] = 0; tmpWrongAmount[2] = 0; tmpWrongAmount[3] = 0;
+    temp.puzzleState[0] = 1; temp.puzzleState[1] = 2; temp.puzzleState[2] = 3;
+    temp.puzzleState[3] = 4; temp.puzzleState[4] = 5; temp.puzzleState[5] = -1;
+    temp.puzzleState[6] = 7; temp.puzzleState[7] = 8; temp.puzzleState[8] = 6;
 
-    currentState[0] = 2; currentState[1] = 5; currentState[2] = -1;
-    currentState[3] = 1; currentState[4] = 4; currentState[5] = 8;
-    currentState[6] = 7; currentState[7] = 3; currentState[8] = 6;
+    temp.g = 0;
+    temp.h = 0;
+    temp.f = 0;
 
-    finalState[0] = 1; finalState[1] = 2; finalState[2] = 3;
-    finalState[3] = 4; finalState[4] = 5; finalState[5] = 6;
-    finalState[6] = 7; finalState[7] = 8; finalState[8] = -1;
+    finalState.puzzleState[0] = 1; finalState.puzzleState[1] = 2; finalState.puzzleState[2] = 3;
+    finalState.puzzleState[3] = 4; finalState.puzzleState[4] = 5; finalState.puzzleState[5] = 6;
+    finalState.puzzleState[6] = 7; finalState.puzzleState[7] = 8; finalState.puzzleState[8] = -1;
 
-    for (int i = 0; i < 9; i++){
-        wrongAmount += wrongPlace(i);
-    }
+    for (int i = 0; i < 9; i++)
+        temp.f += wrongPlace(i, temp);
 
+    openNodes = puzzlePQ(puzzleNodeComp(true));
+
+    openNodes.push(temp);
 
 }
 
-int EightPuzzle::findEmpty(){
+int EightPuzzle::findEmpty(puzzleNode _node){
     for(int i = 0; i < 9; i++) {
-        if(currentState[i] == -1)
+        if(_node.puzzleState[i] == -1)
             return i;
     }
 }
 
 void EightPuzzle::moveEmpty() {
 
-    while(wrongAmount != 0)
+    int nrOfMoves = 0;
+    //while(wrongAmount != 0)
+    while(true)
     {
-        tmpWrongAmount[0] = wrongAmount; tmpWrongAmount[1] = wrongAmount; tmpWrongAmount[2] = wrongAmount; tmpWrongAmount[3] = wrongAmount;
+        expandedNodes.push_back(openNodes.top());
+        openNodes.pop();
 
-        switch(findEmpty()) {
+        switch(findEmpty(expandedNodes.back())) {
         case 0:
             //Move 1 ============================================
-            tryMove(0, 1, 0);
+            pushMove(0, 1);
             //Move 2 ============================================
-            tryMove(0, 3, 1);
-            //Compare Move 1 and 2 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] )
-                makeMove(0, 1, 0);
-            else
-                makeMove(0, 3, 1);
+            pushMove(0, 3);
             break;
         case 1:
             //Move 1 ============================================
-            tryMove(1, 0, 0);
+            pushMove(1, 0);
             //Move 2 ============================================
-            tryMove(1, 2, 1);
+            pushMove(1, 2);
             //Move 3 ============================================
-            tryMove(1, 4, 2);
-            //Compare Move 1, 2, 3 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] &&
-               tmpWrongAmount[0] <= tmpWrongAmount[2]  )
-                makeMove(1, 0, 0);
-            else if (tmpWrongAmount[1] <= tmpWrongAmount[0] &&
-                     tmpWrongAmount[1] <= tmpWrongAmount[2])
-                makeMove(1, 2, 1);
-            else
-                makeMove(1, 4, 2);
+            pushMove(1, 4);
             break;
         case 2:
             //Move 1 ============================================
-            tryMove(2, 1, 0);
+            pushMove(2, 1);
             //Move 2 ============================================
-            tryMove(2, 5, 1);
-            //Compare Move 1 and 2 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] )
-                makeMove(2, 1, 0);
-            else
-                makeMove(2, 5, 1);
+            pushMove(2, 5);
+
             break;
         case 3:
              //Move 1 ============================================
-            tryMove(3, 0, 0);
+            pushMove(3, 0);
             //Move 2 ============================================
-            tryMove(3, 4, 1);
+            pushMove(3, 4);
             //Move 3 ============================================
-            tryMove(3, 6, 2);
-            //Compare Move 1, 2, 3 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] &&
-               tmpWrongAmount[0] <= tmpWrongAmount[2]  )
-                makeMove(3, 0, 0);
-            else if (tmpWrongAmount[1] <= tmpWrongAmount[0] &&
-                     tmpWrongAmount[1] <= tmpWrongAmount[2])
-                makeMove(3, 4, 1);
-            else
-                makeMove(3, 6, 2);
-
+            pushMove(3, 6);
             break;
         case 4:
              //Move 1 ============================================
-            tryMove(4, 1, 0);
+            pushMove(4, 1);
             //Move 2 ============================================
-            tryMove(4, 3, 1);
+            pushMove(4, 3);
             //Move 3 ============================================
-            tryMove(4, 5, 2);
+            pushMove(4, 5);
             //Move 4 ============================================
-            tryMove(4, 7, 3);
-            //Compare Move 1, 2, 3, 4 ===========================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] &&
-               tmpWrongAmount[0] <= tmpWrongAmount[2] &&
-               tmpWrongAmount[0] <= tmpWrongAmount[3] )
-                makeMove(4, 1, 0);
-            else if (tmpWrongAmount[1] <= tmpWrongAmount[0] &&
-                     tmpWrongAmount[1] <= tmpWrongAmount[2] &&
-                     tmpWrongAmount[1] <= tmpWrongAmount[3])
-                makeMove(4, 3, 1);
-            else if (tmpWrongAmount[2] <= tmpWrongAmount[0] &&
-                     tmpWrongAmount[2] <= tmpWrongAmount[1] &&
-                     tmpWrongAmount[2] <= tmpWrongAmount[3])
-                makeMove(4, 5, 2);
-            else
-                makeMove(4, 7, 3);
+            pushMove(4, 7);
             break;
         case 5:
            //Move 1 ============================================
-            tryMove(5, 2, 0);
+            pushMove(5, 2);
             //Move 2 ============================================
-            tryMove(5, 4, 1);
+            pushMove(5, 4);
             //Move 3 ============================================
-            tryMove(5, 8, 2);
-            //Compare Move 1, 2, 3 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] &&
-               tmpWrongAmount[0] <= tmpWrongAmount[2]  )
-                makeMove(5, 2, 0);
-            else if (tmpWrongAmount[1] <= tmpWrongAmount[0] &&
-                     tmpWrongAmount[1] <= tmpWrongAmount[2])
-                makeMove(5, 4, 1);
-            else
-                makeMove(5, 8, 2);
+            pushMove(5, 8);
             break;
         case 6:
           //Move 1 ============================================
-            tryMove(6, 3, 0);
+            pushMove(6, 3);
             //Move 2 ============================================
-            tryMove(6, 7, 1);
-            //Compare Move 1 and 2 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] )
-                makeMove(6, 3, 0);
-            else
-                makeMove(6, 7, 1);
+            pushMove(6, 7);
             break;
         case 7:
              //Move 1 ============================================
-            tryMove(7, 4, 0);
+            pushMove(7, 4);
             //Move 2 ============================================
-            tryMove(7, 6, 1);
+            pushMove(7, 6);
             //Move 3 ============================================
-            tryMove(7, 8, 2);
-            //Compare Move 1, 2, 3 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] &&
-               tmpWrongAmount[0] <= tmpWrongAmount[2]  )
-                makeMove(7, 4, 0);
-            else if (tmpWrongAmount[1] <= tmpWrongAmount[0] &&
-                     tmpWrongAmount[1] <= tmpWrongAmount[2])
-                makeMove(7, 6, 1);
-            else
-                makeMove(7, 8, 2);
+            pushMove(7, 8);
             break;
         case 8:
             //Move 1 ============================================
-            tryMove(8, 5, 0);
+            pushMove(8, 5);
             //Move 2 ============================================
-            tryMove(8, 7, 1);
-            //Compare Move 1 and 2 =======================================
-            //Keep the move with the lowest wrongAmount
-            if(tmpWrongAmount[0] <= tmpWrongAmount[1] )
-                makeMove(8, 5, 0);
-            else
-                makeMove(8, 7, 1);
+            pushMove(8, 7);
             break;
         }
 
         print();
+        nrOfMoves++;
+
+        if(gridEquals(openNodes.top(), finalState))
+           break;
     }
+
+    std::cout << std::endl <<"This heuristic took " <<  nrOfMoves << " moves." <<  std::endl;
 }
 
-bool EightPuzzle::wrongPlace(int _pos) {
-    return currentState[_pos] != finalState[_pos];
+bool EightPuzzle::wrongPlace(int _pos, puzzleNode _node) {
+    return _node.puzzleState[_pos] != finalState.puzzleState[_pos];
 }
 
-bool EightPuzzle::rightPlace(int _pos) {
-    return currentState[_pos] == finalState[_pos];
+bool EightPuzzle::rightPlace(int _pos, puzzleNode _node) {
+    return _node.puzzleState[_pos] == finalState.puzzleState[_pos];
 }
 
-void EightPuzzle::tryMove(int _pos1, int _pos2, int _moveNr ){
+bool EightPuzzle::isExpanded(puzzleNode _node ){
+    for (int i = 0; i < expandedNodes.size(); i++){
+        if(gridEquals(_node, expandedNodes[i]))
+           return true; //Expanded node
+    }
+    return false;
+}
+
+bool EightPuzzle::gridEquals(puzzleNode _node1, puzzleNode _node2){
+    for (int i = 0; i < 9; i++){
+        if( _node1.puzzleState[i] != _node2.puzzleState[i] )
+            return false;
+    }
+    return true;
+}
+
+void EightPuzzle::pushMove(int _pos1, int _pos2 ){
+
+    puzzleNode temp;
+
+    for(int i = 0; i < 9; i++)
+        temp.puzzleState[i] = expandedNodes.back().puzzleState[i];
+
+    temp.f = expandedNodes.back().f;
+    //temp.g = expandedNodes.back().g;
+    //temp.h = expandedNodes.back().h;
+
     //check if the position being moved is already in the correct place
-    tmpWrongAmount[_moveNr] += rightPlace(_pos2);
+    temp.f += rightPlace(_pos2, temp);
 
     //make the move
-    currentState[_pos1] = currentState[_pos2];
-    currentState[_pos2] = -1;
+    temp.puzzleState[_pos1] = temp.puzzleState[_pos2];
+    temp.puzzleState[_pos2] = -1;
 
     //test if the moved position is now in the correct place
-    tmpWrongAmount[_moveNr] -= rightPlace(_pos1);
+    temp.f -= rightPlace(_pos1, temp);
 
-    //Reset grid
-    currentState[_pos2] = currentState[_pos1];
-    currentState[_pos1] = -1;
+    if(!isExpanded(temp))
+        openNodes.push(temp);
 }
 
-void EightPuzzle::makeMove(int _pos1, int _pos2, int _moveNr ){
-    //make the move
-    currentState[_pos1] = currentState[_pos2];
-    currentState[_pos2] = -1;
-
-    wrongAmount = tmpWrongAmount[_moveNr];
+void EightPuzzle::makeMove(int _pos1, int _pos2){
 }
 
 void EightPuzzle::print(){
-    std::cout << currentState[0] << " " << currentState[1] << " " << currentState[2] << std::endl <<
-                 currentState[3] << " " << currentState[4] << " " << currentState[5] << std::endl <<
-                 currentState[6] << " " << currentState[7] << " " << currentState[8] << std::endl <<
-                 wrongAmount << std::endl << std::endl;
+    std::cout << openNodes.top().puzzleState[0] << " " << openNodes.top().puzzleState[1] << " " << openNodes.top().puzzleState[2] << std::endl <<
+                 openNodes.top().puzzleState[3] << " " << openNodes.top().puzzleState[4] << " " << openNodes.top().puzzleState[5] << std::endl <<
+                 openNodes.top().puzzleState[6] << " " << openNodes.top().puzzleState[7] << " " << openNodes.top().puzzleState[8] << std::endl <<
+                 openNodes.top().f << std::endl << std::endl;
 
 }
