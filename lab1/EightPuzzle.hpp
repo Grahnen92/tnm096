@@ -41,6 +41,10 @@ private:
 
     bool wrongPlace(int _pos, puzzleNode _node);
     bool rightPlace(int _pos, puzzleNode _node);
+    int wrongSum(puzzleNode _node);
+
+    int manhattanSum(puzzleNode _node);
+    int manhattanDist(int _pos1, int _pos2);
 
     bool gridEquals(puzzleNode _node1, puzzleNode _node2);
 

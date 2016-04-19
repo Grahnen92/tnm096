@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1461060520 source:h:\tnm096\lab1\eightpuzzle.cpp
+1461069066 source:h:\tnm096\lab1\eightpuzzle.cpp
 	"EightPuzzle.hpp"
 	<iostream>
+	<stdlib.h>
 
-1461060183 h:\tnm096\lab1\eightpuzzle.hpp
+1461068879 h:\tnm096\lab1\eightpuzzle.hpp
 	<vector>
 	<queue>
 
