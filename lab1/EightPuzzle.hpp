@@ -7,6 +7,7 @@ struct puzzleNode{
     int h;
     //maybe g + h in one variable
     int f;
+    std::vector<char> moves;
 };
 
 class puzzleNodeComp {
@@ -50,7 +51,7 @@ private:
 
     bool isExpanded(puzzleNode _node );
 
-    void pushMove(int _pos1, int _pos2);
+    void pushMove(int _pos1, int _pos2, char moved);
     void makeMove(int _pos1, int _pos2);
 
     puzzleNode finalState;

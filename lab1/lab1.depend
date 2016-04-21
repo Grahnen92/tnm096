@@ -20,3 +20,24 @@
 
 1460640330 h:\tnm096\lab1\tree.hpp
 
+1461222204 source:h:\tnm096\tnm096-master\lab1\heap.cpp
+	"Tree.hpp"
+	<iostream>
+
+1461222204 h:\tnm096\tnm096-master\lab1\tree.hpp
+
+1461222205 source:h:\tnm096\tnm096-master\lab1\main.cpp
+	<iostream>
+	<vector>
+	<queue>
+	"EightPuzzle.hpp"
+
+1461225553 h:\tnm096\tnm096-master\lab1\eightpuzzle.hpp
+	<vector>
+	<queue>
+
+1461226972 source:h:\tnm096\tnm096-master\lab1\eightpuzzle.cpp
+	"EightPuzzle.hpp"
+	<iostream>
+	<stdlib.h>
+
