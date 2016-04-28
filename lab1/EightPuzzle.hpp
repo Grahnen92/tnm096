@@ -1,5 +1,7 @@
 #include <vector>
 #include <queue>
+#include <string>
+#include <map>
 
 struct puzzleNode{
     int puzzleState[9];
@@ -44,6 +46,8 @@ private:
     bool rightPlace(int _pos, puzzleNode _node);
     int wrongSum(puzzleNode _node);
 
+    std::string createKey(puzzleNode _node);
+
     int manhattanSum(puzzleNode _node);
     int manhattanDist(int _pos1, int _pos2);
 
@@ -55,11 +59,13 @@ private:
     void makeMove(int _pos1, int _pos2);
 
     puzzleNode finalState;
+    puzzleNode* lastExpanded;
 
    //int wrongAmount;
     //int tmpWrongAmount[4];
 
-    std::vector<puzzleNode> expandedNodes;
+    std::map<std::string, puzzleNode> expandedNodes;
+    //typedef std::priority_queue<puzzleNode,std::vector<puzzleNode>,puzzleNodeComp> expandedNodes;
 
     typedef std::priority_queue<puzzleNode,std::vector<puzzleNode>,puzzleNodeComp> puzzlePQ;
     //puzzlePQ openNodes(puzzleNodeComp(true));

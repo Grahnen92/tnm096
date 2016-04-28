@@ -6,24 +6,24 @@
 EightPuzzle::EightPuzzle(){
     puzzleNode temp;
 
-    // Book problem
+    // Book problem, 20 moves
     //temp.puzzleState[0] = 2; temp.puzzleState[1] = 5; temp.puzzleState[2] = 0;
     //temp.puzzleState[3] = 1; temp.puzzleState[4] = 4; temp.puzzleState[5] = 8;
     //temp.puzzleState[6] = 7; temp.puzzleState[7] = 3; temp.puzzleState[8] = 6;
 
-    // Should take 31 moves
-//    temp.puzzleState[0] = 8; temp.puzzleState[1] = 6; temp.puzzleState[2] = 7;
-//    temp.puzzleState[3] = 2; temp.puzzleState[4] = 5; temp.puzzleState[5] = 4;
-//    temp.puzzleState[6] = 3; temp.puzzleState[7] = 0; temp.puzzleState[8] = 1;
+    // Should take 31 moves, takes 180.6 seconds with manhattan when using a vector
+    temp.puzzleState[0] = 8; temp.puzzleState[1] = 6; temp.puzzleState[2] = 7;
+    temp.puzzleState[3] = 2; temp.puzzleState[4] = 5; temp.puzzleState[5] = 4;
+    temp.puzzleState[6] = 3; temp.puzzleState[7] = 0; temp.puzzleState[8] = 1;
 
     // Run unsolvable
-    temp.puzzleState[0] = 8; temp.puzzleState[1] = 1; temp.puzzleState[2] = 2;
-    temp.puzzleState[3] = 0; temp.puzzleState[4] = 4; temp.puzzleState[5] = 3;
-    temp.puzzleState[6] = 7; temp.puzzleState[7] = 6; temp.puzzleState[8] = 5;
+    //temp.puzzleState[0] = 8; temp.puzzleState[1] = 1; temp.puzzleState[2] = 2;
+    //temp.puzzleState[3] = 0; temp.puzzleState[4] = 4; temp.puzzleState[5] = 3;
+    //temp.puzzleState[6] = 7; temp.puzzleState[7] = 6; temp.puzzleState[8] = 5;
 
     temp.g = 0;
-    temp.h = 0;
-    temp.f = 0;
+    //temp.h = 0;
+    //temp.f = 0;
 
     finalState.puzzleState[0] = 1; finalState.puzzleState[1] = 2; finalState.puzzleState[2] = 3;
     finalState.puzzleState[3] = 4; finalState.puzzleState[4] = 5; finalState.puzzleState[5] = 6;
@@ -32,13 +32,12 @@ EightPuzzle::EightPuzzle(){
     //for (int i = 0; i < 9; i++)
     //    temp.f += wrongPlace(i, temp);
 
-    //temp.f = wrongSum(temp);
-    temp.f = manhattanSum(temp);
+    //temp.h = temp.f = wrongSum(temp);
+    temp.h = temp.f = manhattanSum(temp);
 
     openNodes = puzzlePQ(puzzleNodeComp(true));
 
     openNodes.push(temp);
-
 }
 
 int EightPuzzle::findEmpty(puzzleNode _node){
@@ -51,13 +50,16 @@ int EightPuzzle::findEmpty(puzzleNode _node){
 void EightPuzzle::moveEmpty() {
 
     int nrOfMoves = 0;
+    std::string tmpString;
     //while(wrongAmount != 0)
     while(true)
     {
-        expandedNodes.push_back(openNodes.top());
+        tmpString = createKey(openNodes.top());
+        expandedNodes.insert({tmpString, openNodes.top()});
+        lastExpanded = &expandedNodes.at(tmpString);
         openNodes.pop();
 
-        switch(findEmpty(expandedNodes.back())) {
+        switch(findEmpty(*lastExpanded)) {
         case 0:
             //Move 1 ============================================
             pushMove(0, 1, 'r');
@@ -128,13 +130,13 @@ void EightPuzzle::moveEmpty() {
         }
 
         //print();
-        //nrOfMoves++;
+        nrOfMoves++;
 
         if(gridEquals(openNodes.top(), finalState) || openNodes.empty())
            break;
     }
 
-    std::cout << std::endl <<"This heuristic took " <<  expandedNodes.size() << " moves." <<  std::endl;
+    std::cout << std::endl <<"This heuristic took " <<  nrOfMoves << " moves." <<  std::endl;
 }
 
 bool EightPuzzle::wrongPlace(int _pos, puzzleNode _node) {
@@ -146,11 +148,10 @@ bool EightPuzzle::rightPlace(int _pos, puzzleNode _node) {
 }
 
 bool EightPuzzle::isExpanded(puzzleNode _node ){
-    for (int i = 0; i < expandedNodes.size(); i++){
-        if(gridEquals(_node, expandedNodes[i]))
-           return true; //Expanded node
-    }
-    return false;
+    if(expandedNodes.find(createKey(_node)) == expandedNodes.end())
+        return false;
+    else
+        return true;
 }
 
 bool EightPuzzle::gridEquals(puzzleNode _node1, puzzleNode _node2){
@@ -215,18 +216,18 @@ void EightPuzzle::pushMove(int _pos1, int _pos2, char moved ){
     //temp.moves.push_back(moved);
 
     for(int i = 0; i < 9; i++)
-        temp.puzzleState[i] = expandedNodes.back().puzzleState[i];
+        temp.puzzleState[i] = lastExpanded->puzzleState[i];
 
     //temp.f = expandedNodes.back().f;
-    temp.g = expandedNodes.back().g + 1;
-    //temp.h = expandedNodes.back().h;
+    temp.g = lastExpanded->g + 1;
+    temp.h = manhattanSum(temp);
+    //temp.h = wrongSum(temp);
 
     //make the move
     temp.puzzleState[_pos1] = temp.puzzleState[_pos2];
     temp.puzzleState[_pos2] = 0;
 
-    //temp.f = wrongSum(temp) + temp.g;
-    temp.f = manhattanSum(temp) + temp.g;
+    temp.f = temp.h + temp.g;
 
     if(!isExpanded(temp))
         openNodes.push(temp);
@@ -240,6 +241,15 @@ void EightPuzzle::print(){
                  openNodes.top().puzzleState[3] << " " << openNodes.top().puzzleState[4] << " " << openNodes.top().puzzleState[5] << std::endl <<
                  openNodes.top().puzzleState[6] << " " << openNodes.top().puzzleState[7] << " " << openNodes.top().puzzleState[8] << std::endl <<
                  "f: " << openNodes.top().f << std::endl << "g: " << openNodes.top().g << std::endl <<
-                 "Moves made: " << openNodes.top().moves.size() << std::endl;
+                 "Moves made: " << openNodes.top().g << std::endl;
 
+}
+
+std::string EightPuzzle::createKey(puzzleNode _node){
+
+    std::string tmpString = "";
+    for (int i = 0; i < 9; i++){
+        tmpString += _node.puzzleState[i];
+    }
+    return tmpString;
 }

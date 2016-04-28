@@ -32,11 +32,13 @@
 	<queue>
 	"EightPuzzle.hpp"
 
-1461225553 h:\tnm096\tnm096-master\lab1\eightpuzzle.hpp
+1461750877 h:\tnm096\tnm096-master\lab1\eightpuzzle.hpp
 	<vector>
 	<queue>
+	<string>
+	<map>
 
-1461226972 source:h:\tnm096\tnm096-master\lab1\eightpuzzle.cpp
+1461750934 source:h:\tnm096\tnm096-master\lab1\eightpuzzle.cpp
 	"EightPuzzle.hpp"
 	<iostream>
 	<stdlib.h>
