@@ -1,6 +1,8 @@
 import java.awt.*; 
 import javax.swing.*;
-
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class main {
 	public static void main(String [ ] args)
@@ -10,5 +12,11 @@ public class main {
 	    	  System.out.println(i);
 	      }
 	      
+	      Clause cTest = new Clause('A', true, true);
+	      Sentence sTest = new Sentence();
+	      
+	      sTest.addClause(cTest);
+	      
+	      System.out.println("success");
 	}
 }
