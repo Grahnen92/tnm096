@@ -32,8 +32,8 @@ EightPuzzle::EightPuzzle(){
     //for (int i = 0; i < 9; i++)
     //    temp.f += wrongPlace(i, temp);
 
-    //temp.h = temp.f = wrongSum(temp);
-    temp.h = temp.f = manhattanSum(temp);
+    temp.h = temp.f = 2*wrongSum(temp);
+    //temp.h = temp.f = manhattanSum(temp);
 
     openNodes = puzzlePQ(puzzleNodeComp(true));
 
@@ -220,8 +220,8 @@ void EightPuzzle::pushMove(int _pos1, int _pos2, char moved ){
 
     //temp.f = expandedNodes.back().f;
     temp.g = lastExpanded->g + 1;
-    temp.h = manhattanSum(temp);
-    //temp.h = wrongSum(temp);
+    //temp.h = manhattanSum(temp);
+    temp.h = 2*wrongSum(temp);
 
     //make the move
     temp.puzzleState[_pos1] = temp.puzzleState[_pos2];
