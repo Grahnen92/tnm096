@@ -6,17 +6,12 @@ import java.util.List;
 
 public class main {
 	public static void main(String [ ] args)
-	{
-	      int test = 1;
-	      for (int i = 0; i < 10 ; i++){
-	    	  System.out.println(i);
-	      }
-	      
-	      Clause cTest = new Clause('A', true, true);
+	{     	      
 	      Sentence sTest = new Sentence();
-	      
-	      sTest.addClause(cTest);
-	      
+	      sTest.addToSentence("(a|~a)&(c|d|e|f)&(g|h|i)");
+	      sTest.print();
+	      sTest.evaluate();
+	      sTest.print();
 	      System.out.println("success");
 	}
 }
