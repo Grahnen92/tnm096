@@ -1,11 +1,45 @@
 # depslib dependency file v1.0
-1460637604 source:h:\tnm096\lab1\eightpuzzle.cpp
+1461069066 source:h:\tnm096\lab1\eightpuzzle.cpp
 	"EightPuzzle.hpp"
 	<iostream>
+	<stdlib.h>
 
-1460637502 h:\tnm096\lab1\eightpuzzle.hpp
+1461068879 h:\tnm096\lab1\eightpuzzle.hpp
+	<vector>
+	<queue>
 
-1460637157 source:h:\tnm096\lab1\main.cpp
+1461060551 source:h:\tnm096\lab1\main.cpp
 	<iostream>
+	<vector>
+	<queue>
 	"EightPuzzle.hpp"
+
+1460638924 source:h:\tnm096\lab1\heap.cpp
+	"Tree.hpp"
+	<iostream>
+
+1460640330 h:\tnm096\lab1\tree.hpp
+
+1461222204 source:h:\tnm096\tnm096-master\lab1\heap.cpp
+	"Tree.hpp"
+	<iostream>
+
+1461222204 h:\tnm096\tnm096-master\lab1\tree.hpp
+
+1461222205 source:h:\tnm096\tnm096-master\lab1\main.cpp
+	<iostream>
+	<vector>
+	<queue>
+	"EightPuzzle.hpp"
+
+1461750877 h:\tnm096\tnm096-master\lab1\eightpuzzle.hpp
+	<vector>
+	<queue>
+	<string>
+	<map>
+
+1461750934 source:h:\tnm096\tnm096-master\lab1\eightpuzzle.cpp
+	"EightPuzzle.hpp"
+	<iostream>
+	<stdlib.h>
 
